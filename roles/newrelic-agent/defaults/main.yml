@@ -1,0 +1,7 @@
+---
+os_codename: xenial
+nrinfragent_state: "latest"
+nrinfragent_service_enabled: "yes"
+nrinfragent_service_state: "started"
+license_key: c63db6fb8c05ca0724e66d1615b0a7867335ac90
+nrinfragent_integrations: []

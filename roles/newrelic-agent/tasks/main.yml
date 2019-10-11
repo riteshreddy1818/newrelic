@@ -1,0 +1,4 @@
+---
+- name: install newrelic agent
+  import_tasks: newrelic_agent.yml
+

@@ -1,0 +1,36 @@
+---
+ - name: Update and upgrade apt packages
+   become: true
+   apt:
+     upgrade: yes
+
+ - name: NewRelic | Add apt sources list
+   apt_repository:
+     repo: deb [arch=amd64] https://download.newrelic.com/infrastructure_agent/linux/apt {{  os_codename }} main
+     state: present
+   tags: newrelic
+
+ - name: NewRelic | Add GPG key to the apt sources keyring
+   apt_key:
+     url: https://download.newrelic.com/infrastructure_agent/gpg/newrelic-infra.gpg
+     state: present
+   tags: newrelic
+
+ - name: NewRelic | Run the install command
+   apt: pkg=newrelic-infra update_cache=yes
+   tags: newrelic
+   
+ - name: setup agent config
+   template:
+     src: newrelic-infra.yml.j2
+     dest: /etc/newrelic-infra.yml
+     mode: 0600
+
+ - name: NewRelic | Add license key in the config file
+   lineinfile:
+     path: /etc/newrelic-infra.yml
+     regexp: '^license_key: {{ license_key }}'
+     line: 'license_key: {{ license_key }}'
+     state: present
+   notify: restart newrelic-infra
+   tags: [newrelic, newrelic-license]
